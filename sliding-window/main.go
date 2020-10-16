@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func getMax(a, b int) int {
 	if a > b {
 		return a
@@ -75,12 +77,7 @@ func longestSubstringWithKDistinct(str []byte, K int) int {
 	count := make(map[byte]int)
 
 	for end := 0; end < len(str); end++ {
-		_, ok := count[str[end]]
-		if ok {
-			count[str[end]]++
-		} else {
-			count[str[end]] = 1
-		}
+		count[str[end]]++
 
 		for len(count) > K {
 			count[str[start]]--
@@ -102,12 +99,7 @@ func fruitsIntoBaskets(str []byte) int {
 	count := make(map[byte]int)
 
 	for end := 0; end < len(str); end++ {
-		_, ok := count[str[end]]
-		if ok {
-			count[str[end]]++
-		} else {
-			count[str[end]] = 1
-		}
+		count[str[end]]++
 
 		for len(count) > 2 {
 			count[str[start]]--
@@ -146,6 +138,25 @@ func nonRepeatSubstring(str []byte) int {
 	return max
 }
 
-func main() {
+func findLongestSubstringReplaceK(str []byte, k int) int {
+	var start, max, maxRepeat int
+	count := make(map[byte]int)
 
+	for end := 0; end < len(str); end++ {
+		count[str[end]]++
+		maxRepeat = getMax(maxRepeat, count[str[end]])
+
+		if end-start+1-maxRepeat > k {
+			count[str[start]]--
+			start++
+		}
+		max = getMax(max, end-start+1)
+	}
+	return max
+}
+
+func main() {
+	input := []byte{'a', 'b', 'b', 'c', 'b'}
+	k := 1
+	fmt.Println(findLongestSubstringReplaceK(input, k))
 }

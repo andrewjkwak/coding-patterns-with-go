@@ -130,6 +130,34 @@ func TestNonRepeatSubstring(t *testing.T) {
 	}
 }
 
+func TestFindLongestSubstringReplaceK(t *testing.T) {
+	tests := []struct {
+		input  []byte
+		k      int
+		output int
+	}{
+		{
+			input:  []byte{'a', 'a', 'b', 'c', 'c', 'b', 'b'},
+			k:      2,
+			output: 5,
+		},
+		{
+			input:  []byte{'a', 'b', 'b', 'c', 'b'},
+			k:      1,
+			output: 4,
+		},
+		{
+			input:  []byte{'a', 'b', 'c', 'c', 'd', 'e'},
+			k:      1,
+			output: 3,
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, findLongestSubstringReplaceK(v.input, v.k), v.output)
+	}
+}
+
 func assertEquals(t *testing.T, got, want int) {
 	t.Helper()
 	if got != want {
