@@ -29,7 +29,7 @@ func TestFindSumInSortedArray(t *testing.T) {
 	}
 
 	for _, v := range tests {
-		assertArrayEquals(t, findSumInSortedArray(v.input, v.target), v.output)
+		assertEquals(t, findSumInSortedArray(v.input, v.target), v.output)
 	}
 }
 
@@ -74,16 +74,53 @@ func TestRemoveKey(t *testing.T) {
 	}
 }
 
-func assertArrayEquals(t *testing.T, got, want []int) {
-	t.Helper()
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got %v want %v", got, want)
+func TestSquareSortedArray(t *testing.T) {
+	tests := []struct {
+		input  []int
+		output []int
+	}{
+		{
+			input:  []int{-4, -1, 0, 3, 10},
+			output: []int{0, 1, 9, 16, 100},
+		},
+		{
+			input:  []int{-7, -3, 2, 3, 11},
+			output: []int{4, 9, 9, 49, 121},
+		},
+		{
+			input:  []int{-5, -4, -3, -2, -1},
+			output: []int{1, 4, 9, 16, 25},
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, squareSortedArray(v.input), v.output)
 	}
 }
 
-func assertEquals(t *testing.T, got, want int) {
+func TestSearchTriplets(t *testing.T) {
+	tests := []struct {
+		input  []int
+		output [][]int
+	}{
+		{
+			input:  []int{-3, 0, 1, 2, -1, 1, -2},
+			output: [][]int{{-3, 1, 2}, {-2, 0, 2}, {-2, 1, 1}, {-1, 0, 1}},
+		},
+		{
+			input:  []int{-5, 2, -1, -2, 3},
+			output: [][]int{{-5, 2, 3}, {-2, -1, 3}},
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, searchTriplets(v.input), v.output)
+	}
+}
+
+func assertEquals(t *testing.T, got, want interface{}) {
 	t.Helper()
-	if got != want {
-		t.Errorf("got %d want %d", got, want)
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
 	}
 }

@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // Helper functions
 func Abs(n int) int {
@@ -57,19 +60,79 @@ func removeKey(nums []int, key int) int {
 
 // Given a sorted array, create a new array containing squares of all the
 // number of the input array in the sorted array
-// func squareSortedArray(nums []int) []int {
-// 	var p, n int
-// 	res := []int{}
-// 	for p < len(nums) {
-// 		if nums[p] < 0 {
-// 			p++
-// 		}
-// 	}
-// 	return []int{}
-// }
+func squareSortedArray(nums []int) []int {
+	var p, n int
+	res := []int{}
+	// We need to find the first non-negative integer but also make sure we don't exit the slice
+	for nums[p] < 0 && p < len(nums)-1 {
+		p++
+	}
+	// At this point, we have the index for the first non-negative value
+	// The one right before it is the pointer for the negative values
+	// We compare n and p to see which value is less (in absolute value)
+	// We also need to make sure that n >= 0 && p < len(nums)
+	n = p - 1
+	for n >= 0 && p < len(nums) {
+		if Abs(nums[n]) < nums[p] {
+			res = append(res, nums[n]*nums[n])
+			n--
+		} else {
+			res = append(res, nums[p]*nums[p])
+			p++
+		}
+	}
+	for n >= 0 {
+		res = append(res, nums[n]*nums[n])
+		n--
+	}
+	for p < len(nums) {
+		res = append(res, nums[p]*nums[p])
+		p++
+	}
+	return res
+}
+
+// Given an array of unsorted numbers, find all unique triplets in it that add up to zero.
+func searchTriplets(nums []int) [][]int {
+	triplets := [][]int{}
+	// Sort the array to be able to use two-pointer
+	sort.Ints(nums)
+	// Make sure we go len(nums)-2 before so that we have enough values after where a triplet could exist
+	for i := 0; i < len(nums)-2; i++ {
+		// We skip the duplicates (for 0, we don't have to since there's no number before it)
+		if i > 0 && nums[i] == nums[i-1] {
+			continue
+		}
+		// Get the target (the negative value of the value we're currently on)
+		// left is the index after the number we're currently on, as we're searching after it
+		// right is the end of the array
+		target, left, right := -nums[i], i+1, len(nums)-1
+		for left < right {
+			sum := nums[left] + nums[right]
+			// if the sum is equal to the target, we found a triplet
+			if sum == target {
+				triplets = append(triplets, []int{nums[i], nums[left], nums[right]})
+				// we still need to keep searching, as there might be other triplets available for that value
+				// we make sure to prevent adding any duplicates using the while-loops
+				left++
+				right--
+				for left < right && nums[left] == nums[left-1] {
+					left++
+				}
+				for left < right && nums[right] == nums[right+1] {
+					right--
+				}
+			} else if sum > target {
+				right--
+			} else if sum < target {
+				left++
+			}
+		}
+	}
+	return triplets
+}
 
 func main() {
-	x := make([]int, _, 10)
-	x = append(x, 1)
-	fmt.Printf("%v", x)
+	input := []int{-5, 2, -1, -2, 3}
+	fmt.Printf("%v", searchTriplets(input))
 }
