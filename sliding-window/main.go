@@ -155,8 +155,48 @@ func findLongestSubstringReplaceK(str []byte, k int) int {
 	return max
 }
 
+func permutationPatternInString(str, pattern string) bool {
+	patternCount := make(map[byte]int)
+	// Add all the chars from pattern into patternCount
+	for i := 0; i < len(pattern); i++ {
+		patternCount[pattern[i]]++
+	}
+	matched, start := 0, 0
+	// Iterate thru str, and every single time patternCount of char hits 0,
+	// we know we fulfilled one of the chars and we can increment matched
+	// Once matched hits len(patternCount), we know we have a match and can return true
+	// We have to make sure our "window" is only to len(pattern)... If we go above it,
+	// increment start by 1 to slide the window down
+	for end := 0; end < len(str); end++ {
+		_, ok := patternCount[str[end]]
+		// We only care if the char exists in patternCount
+		if ok {
+			patternCount[str[end]]--
+			if patternCount[str[end]] == 0 {
+				matched++
+			}
+		}
+		if matched == len(patternCount) {
+			return true
+		}
+		// If our window size is too big, slide it
+		if end-start+1 >= len(pattern) {
+			_, ok := patternCount[str[start]]
+			// if the start-index char exists in pattern count, we want to increment it since we're basically
+			// "putting it back" and we want to decrement matched if the count was 0 since it's now unmatched
+			if ok {
+				if patternCount[str[start]] == 0 {
+					matched--
+				}
+				patternCount[str[start]]++
+			}
+			start++
+		}
+	}
+	return false
+}
+
 func main() {
-	input := []byte{'a', 'b', 'b', 'c', 'b'}
-	k := 1
-	fmt.Println(findLongestSubstringReplaceK(input, k))
+	str, pattern := "aaacb", "abc"
+	fmt.Printf("%t", permutationPatternInString(str, pattern))
 }

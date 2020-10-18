@@ -158,7 +158,40 @@ func TestFindLongestSubstringReplaceK(t *testing.T) {
 	}
 }
 
-func assertEquals(t *testing.T, got, want int) {
+func TestPermutationPatternInString(t *testing.T) {
+	tests := []struct{
+		input string
+		pattern string
+		output bool
+	}{
+		{
+			input: "oidbcaf",
+			pattern: "abc",
+			output: true,
+		},
+		{
+			input: "odicf",
+			pattern: "dc",
+			output: false,
+		},
+		{
+			input: "bcdxabcdy",
+			pattern: "bcdyabcdx",
+			output: true,
+		},
+		{
+			input: "aaacb",
+			pattern: "abc",
+			output: true,
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, permutationPatternInString(v.input, v.pattern), v.output)
+	}
+}
+
+func assertEquals(t *testing.T, got, want interface{}) {
 	t.Helper()
 	if got != want {
 		t.Errorf("got %d want %d", got, want)
