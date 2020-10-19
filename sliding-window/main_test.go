@@ -191,9 +191,65 @@ func TestPermutationPatternInString(t *testing.T) {
 	}
 }
 
+func TestFindStringAnagrams(t *testing.T) {
+	tests := []struct{
+		input string
+		pattern string
+		output []int
+	}{
+		{
+			input: "ppqp",
+			pattern: "pq",
+			output: []int{1,2},
+		},
+		{
+			input: "abbcabc",
+			pattern: "abc",
+			output: []int{2,3,4},
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, findStringAnagrams(v.input, v.pattern), v.output)
+	}
+}
+
+func TestMinimumWindowSubstring(t *testing.T) {
+	tests := []struct{
+		input string
+		pattern string
+		output string
+	}{
+		{
+			input: "aabdec",
+			pattern: "abc",
+			output: "abdec",
+		}, 
+		{
+			input: "abdbca", 
+			pattern: "abc",
+			output: "bca",
+		},
+		{
+			input: "adcad",
+			pattern: "abc",
+			output: "",
+		},
+		{
+			input: "bca",
+			pattern: "ba",
+			output: "bca",
+		},
+	}
+
+	for _,v := range tests {
+		assertEquals(t, minimumWindowSubstring(v.input, v.pattern), v.output)
+	}
+}
+
 func assertEquals(t *testing.T, got, want interface{}) {
 	t.Helper()
-	if got != want {
+	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %d want %d", got, want)
 	}
 }

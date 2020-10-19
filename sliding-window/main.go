@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func getMax(a, b int) int {
 	if a > b {
 		return a
@@ -11,6 +9,13 @@ func getMax(a, b int) int {
 
 func getMin(a, b int) int {
 	if a < b {
+		return a
+	}
+	return b
+}
+
+func getMinString(a, b string) string {
+	if len(a) < len(b) {
 		return a
 	}
 	return b
@@ -138,6 +143,8 @@ func nonRepeatSubstring(str []byte) int {
 	return max
 }
 
+// Given a string with lowercase letters only, if you are allowed to replace no more than 'k'
+// letters with any letter, find the length of the longest substring having the same letters after replacement
 func findLongestSubstringReplaceK(str []byte, k int) int {
 	var start, max, maxRepeat int
 	count := make(map[byte]int)
@@ -155,6 +162,7 @@ func findLongestSubstringReplaceK(str []byte, k int) int {
 	return max
 }
 
+// Given a string and a pattern, find out if the string contains any permutation of the pattern.
 func permutationPatternInString(str, pattern string) bool {
 	patternCount := make(map[byte]int)
 	// Add all the chars from pattern into patternCount
@@ -196,7 +204,79 @@ func permutationPatternInString(str, pattern string) bool {
 	return false
 }
 
+// Given a string and a pattern, find all anagrams of the pattern in the given string.
+// ex: str: "abbcabc", pattern: "abc" -> anagram from index 2, index 3, and index 4 [2, 3, 4]
+func findStringAnagrams(str, pattern string) []int {
+	// This is similar to last problem, except we get all instances of it and return array of indices
+	patternCount := make(map[byte]int)
+	res := []int{}
+	for i := 0; i < len(pattern); i++ {
+		patternCount[pattern[i]]++
+	}
+	matched, start := 0, 0
+	for end := 0; end < len(str); end++ {
+		_, ok := patternCount[str[end]]
+		if ok {
+			patternCount[str[end]]--
+			if patternCount[str[end]] == 0 {
+				matched++
+			}
+		}
+		// If we found a match, add the start index to the slice and decrement matched again
+		if matched == len(patternCount) {
+			res = append(res, start)
+		}
+		// Slide the window by 1 if we reached our window size
+		if end-start+1 >= len(pattern) {
+			_, ok := patternCount[str[start]]
+			if ok {
+				if patternCount[str[start]] == 0 {
+					matched--
+				}
+				patternCount[str[start]]++
+			}
+			start++
+		}
+	}
+	return res
+}
+
+// Given a string and a pattern, find the smallest substring in the given string which has 
+// all the characters of the given pattern.
+// ex: str: "aabdec", pattern: "abc" -> "abdec" since c is at the end
+func minimumWindowSubstring(str, pattern string) string {
+	patternCount := make(map[byte]int)
+	for i := range pattern {
+		patternCount[pattern[i]]++
+	}
+
+	matched, start := 0, 0
+	res := string(make([]byte, len(str)))
+	for end := 0; end < len(str); end++ {
+		if _, ok := patternCount[str[end]]; ok {
+			patternCount[str[end]]--
+			if patternCount[str[end]] == 0 {
+				matched++
+			}
+		}
+		for matched >= len(patternCount) {
+			if len(res) >= len(str[start:end+1]) {
+				res = str[start:end+1]
+			}
+			if _, ok := patternCount[str[start]]; ok {
+				patternCount[str[start]]++
+				if patternCount[str[start]] > 0 {
+					matched--
+				}
+			}
+			start++
+		}
+	}
+	if res == string(make([]byte, len(str))) {
+		return ""
+	}
+	return res
+}
+
 func main() {
-	str, pattern := "aaacb", "abc"
-	fmt.Printf("%t", permutationPatternInString(str, pattern))
 }
