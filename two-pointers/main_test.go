@@ -118,6 +118,67 @@ func TestSearchTriplets(t *testing.T) {
 	}
 }
 
+func TestTripletSumClosestToTarget(t *testing.T) {
+	tests := []struct {
+		input  []int
+		target int
+		output int
+	}{
+		{
+			input:  []int{-2, 0, 1, 2},
+			target: 2,
+			output: 1,
+		},
+		{
+			input:  []int{-3, -1, 1, 2},
+			target: 1,
+			output: 0,
+		},
+		{
+			input:  []int{1, 0, 1, 1},
+			target: 100,
+			output: 3,
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, tripletSumClosestToTarget(v.input, v.target), v.output)
+	}
+}
+
+func TestTripletSumSmallerThanTarget(t *testing.T) {
+	tests := []struct {
+		input  []int
+		target int
+		output int
+	}{
+		{
+			input:  []int{-1, 0, 2, 3},
+			target: 3,
+			output: 2,
+		},
+		{
+			input:  []int{-1, 4, 2, 1, 3},
+			target: 5,
+			output: 4,
+		},
+		{
+			input:  []int{},
+			target: 0,
+			output: 0,
+		},
+		{
+			input:  []int{0},
+			target: 0,
+			output: 0,
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, tripletSumSmallerThanTarget(v.input, v.target), v.output)
+	}
+}
+
 func assertEquals(t *testing.T, got, want interface{}) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {

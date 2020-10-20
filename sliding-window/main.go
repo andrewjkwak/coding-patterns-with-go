@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"strings"
+) 
+
 func getMax(a, b int) int {
 	if a > b {
 		return a
@@ -276,6 +281,13 @@ func minimumWindowSubstring(str, pattern string) string {
 		return ""
 	}
 	return res
+}
+
+// Give a string and a list of words, find all the starting indices of substrings in the given string
+// that are a concatenation of all the given words exactly once without any overlapping of words.
+// It is a given that all words are of the same length.
+func findWordConcatenation(str string, words []string) []int {
+	
 }
 
 func main() {

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"sort"
 )
 
@@ -11,6 +12,13 @@ func Abs(n int) int {
 		return -n
 	}
 	return n
+}
+
+func Min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
 
 // Given an array of sorted numbers and a target sum, find a pair in the array
@@ -132,7 +140,59 @@ func searchTriplets(nums []int) [][]int {
 	return triplets
 }
 
+// Given an array of unsorted numbers and a target number, find a triplet in the array whose sum is
+// as close to the target number as possible, return the sum of the triplet.
+func tripletSumClosestToTarget(nums []int, target int) int {
+	res := math.MaxInt32
+	sort.Ints(nums)
+	for i := 0; i < len(nums)-2; i++ {
+		left, right := i+1, len(nums)-1
+		for left < right {
+			threeSum := nums[i] + nums[left] + nums[right]
+			// Check to see if we found a match, else get the threeSum with the lowest diff to target
+			if target == threeSum {
+				return threeSum
+			} else if Abs(target-threeSum) < Abs(target-res) {
+				res = threeSum
+			}
+
+			// We know if our threeSum is greater than target, moving our right up will just increase
+			// that difference... taking us further away from the closest sum
+			// Therefore, we decrement right by 1, else increment left by 1
+			if threeSum > target {
+				right--
+			} else {
+				left++
+			}
+		}
+	}
+	return res
+}
+
+// Given an array nums of unsorted numbers and a target sum, count all triplets in it such that
+// the sum of the triplet is less than target.  Write a function to return the count of the triplets.
+func tripletSumSmallerThanTarget(nums []int, target int) int {
+	count := 0
+	sort.Ints(nums)
+	for i := 0; i < len(nums)-2; i++ {
+		left, right := i+1, len(nums)-1
+		for left < right {
+			threeSum := nums[i] + nums[left] + nums[right]
+			// We know if threeSums is less than target, all numbers between start and end is also less
+			// than target...
+			if threeSum < target {
+				count += right - left
+				left++
+			} else {
+				right--
+			}
+		}
+	}
+	return count
+}
+
 func main() {
-	input := []int{-5, 2, -1, -2, 3}
-	fmt.Printf("%v", searchTriplets(input))
+	input := []int{-1, 0, 2, 3}
+	target := 3
+	fmt.Println(tripletSumSmallerThanTarget(input, target))
 }
