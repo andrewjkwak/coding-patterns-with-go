@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"sort"
 )
@@ -191,8 +190,73 @@ func tripletSumSmallerThanTarget(nums []int, target int) int {
 	return count
 }
 
+// func subarrayProductLessThanK(nums []int, target int) [][]int {
+
+// }
+
+// Given an array containing 0s, 1s and 2s, sort the array in-place.
+func dutchFlagSort(nums []int) {
+	start, end := 0, len(nums)-1
+	for i := 0; i <= end; {
+		if nums[i] == 0 {
+			nums[i], nums[start] = nums[start], nums[i]
+			i++
+			start++
+		} else if nums[i] == 1 {
+			i++
+		} else {
+			nums[i], nums[end] = nums[end], nums[i]
+			end--
+		}
+	}
+}
+
+// Given an array of numbers, find all instances of 4-sums that equals a target
+func fourSum(nums []int, target int) [][]int {
+	// This is basically threeSum with an extra step... I'll be creating a threeSum function
+	// that's a little modified to help me solve this problem
+	quad := [][]int{}
+	sort.Ints(nums)
+
+	for i := 0; i < len(nums)-3; i++ {
+		if i > 0 && nums[i] == nums[i-1] {
+			continue
+		}
+		threeSum(&quad, nums[i], nums[i+1:], target-nums[i])
+	}
+	return quad
+}
+
+// Helper function for fourSum
+func threeSum(quad *[][]int, first int, nums []int, target int) {
+	for i := 0; i < len(nums)-2; i++ {
+		if i > 0 && nums[i] == nums[i-1] {
+			continue
+		}
+
+		left, right := i+1, len(nums)-1
+		for left < right {
+			threeSum := nums[i] + nums[left] + nums[right]
+			if threeSum == target {
+				*quad = append(*quad, []int{first, nums[i], nums[left], nums[right]})
+				left++
+				right--
+
+				for left < right && nums[left] == nums[left-1] {
+					left++
+				}
+				for left < right && nums[left] == nums[right+1] {
+					right--
+				}
+			} else if threeSum > target {
+				right--
+			} else {
+				left++
+			}
+		}
+	}
+}
+
 func main() {
-	input := []int{-1, 0, 2, 3}
-	target := 3
-	fmt.Println(tripletSumSmallerThanTarget(input, target))
+
 }

@@ -179,6 +179,29 @@ func TestTripletSumSmallerThanTarget(t *testing.T) {
 	}
 }
 
+func TestFourSum(t *testing.T) {
+	tests := []struct {
+		input  []int
+		target int
+		output [][]int
+	}{
+		{
+			input:  []int{1, 0, -1, 0, -2, 2},
+			target: 0,
+			output: [][]int{{-2, -1, 1, 2}, {-2, 0, 0, 2}, {-1, 0, 0, 1}},
+		},
+		{
+			input:  []int{},
+			target: 0,
+			output: [][]int{},
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, fourSum(v.input, v.target), v.output)
+	}
+}
+
 func assertEquals(t *testing.T, got, want interface{}) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
