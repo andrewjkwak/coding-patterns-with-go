@@ -257,6 +257,46 @@ func threeSum(quad *[][]int, first int, nums []int, target int) {
 	}
 }
 
-func main() {
+// Given two strings containing backspaces (identified by '#'), check if two strings are equal.
+func compareStrings(str1, str2 string) bool {
+	idx1, idx2 := len(str1)-1, len(str2)-1
+	for idx1 >= 0 || idx2 >= 0 {
+		i1 := nextValidChar(str1, idx1)
+		i2 := nextValidChar(str2, idx2)
 
+		if i1 < 0 && i2 < 0 {
+			return true
+		}
+
+		if i1 < 0 || i2 < 0 {
+			return false
+		}
+
+		if str1[i1] != str2[i2] {
+			return false
+		}
+
+		idx1 = i1 - 1
+		idx2 = i2 - 1
+	}
+	return true
+}
+
+// Helper function for compareStrings
+func nextValidChar(str string, i int) int {
+	backspaceCount := 0
+	for i >= 0 {
+		if str[i] == '#' {
+			backspaceCount++
+		} else if backspaceCount > 0 {
+			backspaceCount--
+		} else {
+			break
+		}
+		i--
+	}
+	return i
+}
+
+func main() {
 }

@@ -202,6 +202,39 @@ func TestFourSum(t *testing.T) {
 	}
 }
 
+func TestCompareString(t *testing.T) {
+	tests := []struct {
+		str1   string
+		str2   string
+		output bool
+	}{
+		{
+			str1:   "xy#z",
+			str2:   "xzz#",
+			output: true,
+		},
+		{
+			str1:   "xy#z",
+			str2:   "xyz#",
+			output: false,
+		},
+		{
+			str1:   "xp#",
+			str2:   "xyz##",
+			output: true,
+		},
+		{
+			str1:   "xywrrmp",
+			str2:   "xywrrmu#p",
+			output: true,
+		},
+	}
+
+	for _, v := range tests {
+		assertEquals(t, compareStrings(v.str1, v.str2), v.output)
+	}
+}
+
 func assertEquals(t *testing.T, got, want interface{}) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
